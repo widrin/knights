@@ -1,0 +1,80 @@
+<!--注释内容
+ s: 代表是结构体，true就是纯数据结构体，不会生成消息编号
+ c: 是否生成前端代码。前后端通讯用的消息，和该消息所引用的所有结构体，必须为true
+ a: 该字段为数组类型
+ req,rep: 通讯用的消息需要带上，C2S对应req，S2C对应rep
+  nc
+ x2x 协程之间通讯
+ level=0  updateAttr ，CalculationAttr
+ level=1  updateAttr
+ level=2  全部都不执行
+
+ nocheck =1 客户端rpc请求不检测等待中的包
+ group 不带mod 的就直接 def（默认）
+ import 导入包体 ,  rely 代表必须导入只支持1个
+ m: 该字段是否为map结构,同时key:t="int32,int64,string,uint32,uint64", val:t2="int32,int64,string,uint32,uint64"
+ l: 给数组用的初始化创建长度  例: l ="16"
+ get : 导出get方法支持 int,string, map, slice, struct, bytes
+ 此生成map[int32]string ,客户端会生成字典, get 会返回对应方法
+byteSize = true 直接生成map的key 和 val 的byte
+ <p i="4" n="B" t="int32" t2="string" d="Str属性" m="true" get="true"/>
+-->
+<packages>
+    <conf k="mysql_addr"
+          v="root:2Ng33CmdtDut!7!E@tcp(10.100.31.119:3306)/engine_dataid?charset=utf8mb4&amp;parseTime=true&amp;loc=Local"/>
+    <rely_import n="tzgit.kaixinxiyou.com/engine/enginemessage/msg/"/>
+    <!--
+    <import n="github.com/golang/protobuf/proto"/>
+    -->
+    <import n="tzgit.kaixinxiyou.com/engine/message/msglist" pck="true"/>
+    <import n="tzgit.kaixinxiyou.com/engine/message" pck="true"/>
+    <group n="通用" d="通用"  mod="def" >
+        <package n="S2CRep" d="通用的，没有额外数据的rep返回" rep="true" c="true" >
+            <p i="1" n="Tag" t="int32" d="返回结果"/>
+        </package>
+    </group>
+    <group n="中心服务器消息" d="中心服务器消息"  mod="center" >
+        <package n="S2SActorHeart" d="活动的actor心跳" req="true">
+            <p i="1" n="GroupId" t="uint32" d="集群编号"/>
+            <p i="2" n="ActorType" t="uint32" d="ActorType"/>
+            <p i="3" n="ServerId" t="uint32" d="ServerId"/>
+            <p i="4" n="ActorIds" t="uint32" d="actorId" a="true"/>
+        </package>
+        <package n="S2SDistributionRuleServerReq" d="获取分配的serverId" req="true">
+            <p i="1" n="ActorId" t="uint32" d="actorId"/>
+            <p i="2" n="ActorType" t="uint32" d="ActorType"/>
+            <p i="3" n="GroupId" t="uint32" d="集群编号"/>
+        </package>
+        <package n="S2SDistributionRuleServerRep" d="获取分配的serverId" rep="true">
+            <p i="1" n="Tag" t="int32" d="结果"/>
+            <p i="2" n="ServerId" t="uint32" d="服务器编号"/>
+        </package>
+        <package n="S2SClearRuleCacheReq" d="获取分配的serverId" req="true">
+            <p i="1" n="ServerId" t="uint32" d="清理缓存rule，后台用"/>
+        </package>
+        <package n="S2SDistributionCenterServerReq" d="获取中心服所在的地址" req="true">
+            <p i="1" n="ActorId" t="uint32" d="groupId*100000+actorType"/>
+        </package>
+        <package n="S2SResetCenterServerReq" d="重新分配中心的serverId" req="true">
+            <p i="1" n="ActorId" t="uint32" d="groupId*100000+actorType"/>
+        </package>
+        <package n="S2SCloseCenterActor" d="关闭Actor" req="true">
+            <p i="1" n="ActorId" t="uint32" d="groupId*100000+actorType"/>
+        </package>
+        <package n="S2SCloseCenterActorSuccess" d="关闭Actor成功" req="true">
+            <p i="1" n="ActorId" t="uint32" d="groupId*100000+actorType"/>
+        </package>
+
+        <package n="S2SDistributionCenterServerRep" d="获取中心服所在的地址" rep="true">
+            <p i="1" n="Tag" t="int32" d="结果"/>
+            <p i="2" n="ServerId" t="uint32" d="服务器编号"/>
+        </package>
+        <package n="S2SHeartCenterServerReq" d="活动的中心服心跳" req="true">
+            <p i="1" n="GroupId" t="uint32" d="集群编号"/>
+            <p i="2" n="ActorType" t="uint32" d="ActorType"/>
+            <p i="3" n="ServerId" t="uint32" d="ServerId"/>
+            <p i="4" n="ActorIds" t="uint32" d="actorId" a="true"/>
+        </package>
+    </group>
+
+</packages>
