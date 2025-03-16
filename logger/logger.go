@@ -20,15 +20,3 @@ type Config struct {
 	MaxAge     int
 	Compress   bool
 }
-
-// 创建日志实例
-func NewLogger(cfg Config) Logger {
-	switch cfg.Driver {
-	case "zap":
-		return newZapLogger(cfg)
-	case "logrus":
-		return newLogrusLogger(cfg)
-	default:
-		panic("unsupported logger driver")
-	}
-}
