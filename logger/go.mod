@@ -1,4 +1,4 @@
-module logger
+module github.com/widrin/knights/logger
 
 go 1.24.1
 

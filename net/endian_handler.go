@@ -3,7 +3,8 @@ package net
 import (
 	"encoding/binary"
 	"errors"
-	"knights/logger"
+
+	"github.com/widrin/knights/logger"
 )
 
 type EndianHandler struct {

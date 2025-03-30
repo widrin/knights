@@ -1,4 +1,4 @@
-module knights/net
+module github.com/widrin/knights/net
 
 go 1.24.1
 
@@ -12,7 +12,5 @@ require (
 	golang.org/x/sync v0.3.0 // indirect
 	golang.org/x/sys v0.12.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
-	github.com/widrin/knights/logger v0.0.0 // indirect
 )
 
-replace knight/logger => github.com/widrin/knights/logger v0.0.0

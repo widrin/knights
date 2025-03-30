@@ -1,4 +1,4 @@
-module db
+module github.com/widrin/knights/db
 
 go 1.24.1
 

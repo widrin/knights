@@ -2,9 +2,10 @@ package net
 
 import (
 	"context"
-	"knights/logger"
 	"sync"
 	"time"
+
+	"github.com/widrin/knights/logger"
 
 	"github.com/panjf2000/gnet/v2"
 )

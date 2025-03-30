@@ -1,8 +1,9 @@
 package net
 
 import (
-	"knights/logger"
 	"sync"
+
+	"github.com/widrin/knights/logger"
 )
 
 type TrafficStats struct {
