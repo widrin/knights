@@ -13,7 +13,7 @@ type Logger interface {
 // 日志配置
 type Config struct {
 	Driver     string // zap/logrus
-	Level      string
+	Level      int32
 	FilePath   string
 	MaxSize    int
 	MaxBackups int

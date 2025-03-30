@@ -30,9 +30,7 @@ func (p *ConnectionPool) Add(cid uint64, conn interface{}) {
 	}
 
 	p.conns[cid] = conn
-	logger.Debug("Connection added",
-		logger.Uint64("cid", cid),
-		logger.Int("total", len(p.conns)))
+	logger.Debug("Connection added cid: %d, total: %d", cid, len(p.conns))
 }
 
 func (p *ConnectionPool) Remove(cid uint64) {
@@ -40,9 +38,7 @@ func (p *ConnectionPool) Remove(cid uint64) {
 	defer p.mu.Unlock()
 
 	delete(p.conns, cid)
-	logger.Debug("Connection removed",
-		logger.Uint64("cid", cid),
-		logger.Int("remaining", len(p.conns)))
+	logger.Debug("Connection removed cid: %d, remaining: %d", cid, len(p.conns))
 
 	if p.autoReconnect {
 		go p.reconnect(cid)

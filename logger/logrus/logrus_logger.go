@@ -35,7 +35,7 @@ func NewLogrusLogger(cfg logger.Config) *LogrusLogger {
 
 	return &LogrusLogger{
 		logger: logger,
-		level:  atomic.NewInt32(int32(parseLevel(cfg.Level))),
+		level:  new(atomic.Int32),
 	}
 }
 
@@ -54,33 +54,36 @@ func (h *writerHook) Levels() []logrus.Level {
 }
 
 func (l *LogrusLogger) Debug(msg string, fields ...interface{}) {
-	l.logger.WithFields(toLogrusFields(fields...)).Debug(msg)
+	l.logger.Debugf(msg, fields...)
 }
 
 func (l *LogrusLogger) Info(msg string, fields ...interface{}) {
-	l.logger.WithFields(toLogrusFields(fields...)).Info(msg)
+	l.logger.Infof(msg, fields...)
 }
 
 func (l *LogrusLogger) Warn(msg string, fields ...interface{}) {
-	l.logger.WithFields(toLogrusFields(fields...)).Warn(msg)
+	l.logger.Warnf(msg, fields...)
 }
 
 func (l *LogrusLogger) Error(msg string, fields ...interface{}) {
-	l.logger.WithFields(toLogrusFields(fields...)).Error(msg)
+	l.logger.Errorf(msg, fields...)
 }
 
-func (l *LogrusLogger) With(fields ...interface{}) Logger {
+func (l *LogrusLogger) With(fields ...interface{}) *LogrusLogger {
 	return &LogrusLogger{
-		logger: l.logger.WithFields(toLogrusFields(fields...)),
+		logger: l.logger.WithFields(toLogrusFields(fields...)).Logger,
 		level:  l.level,
 	}
 }
 
-func (l *LogrusLogger) SetLevel(level string) {
-	l.level.Store(int32(parseLevel(level)))
+func (l *LogrusLogger) SetLevel(level int32) {
+	l.level.Store(level)
 	l.logger.SetLevel(logrus.Level(l.level.Load()))
 }
 
 func toLogrusFields(fields ...interface{}) logrus.Fields {
 	// 转换字段到logrus支持的格式...
+
+	// 这里假设函数返回一个空的 logrus.Fields 类型
+	return logrus.Fields{}
 }
