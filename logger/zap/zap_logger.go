@@ -1,7 +1,7 @@
 package zap
 
 import (
-	"logger"
+	"github.com/widrin/knights/logger"
 
 	"go.uber.org/atomic"
 	"go.uber.org/zap"

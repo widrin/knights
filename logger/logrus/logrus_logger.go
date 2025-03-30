@@ -4,7 +4,7 @@ import (
 	"os"
 	"sync/atomic"
 
-	"logger"
+	"github.com/widrin/knights/logger"
 
 	"github.com/sirupsen/logrus"
 	"gopkg.in/natefinch/lumberjack.v2"
