@@ -4,8 +4,9 @@ import (
 	"os"
 	"sync/atomic"
 
-	"github.com/sirupsen/logrus"
 	"logger"
+
+	"github.com/sirupsen/logrus"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
@@ -14,7 +15,7 @@ type LogrusLogger struct {
 	level  *atomic.Int32
 }
 
-func NewLogrusLogger(cfg logger.Config) LogrusLogger {
+func NewLogrusLogger(cfg logger.Config) *LogrusLogger {
 	logger := logrus.New()
 	logger.SetFormatter(&logrus.JSONFormatter{
 		TimestampFormat: "2006-01-02T15:04:05Z07:00",
@@ -52,4 +53,34 @@ func (h *writerHook) Levels() []logrus.Level {
 	return logrus.AllLevels
 }
 
-// 实现Logger接口所有方法...
+func (l *LogrusLogger) Debug(msg string, fields ...interface{}) {
+	l.logger.WithFields(toLogrusFields(fields...)).Debug(msg)
+}
+
+func (l *LogrusLogger) Info(msg string, fields ...interface{}) {
+	l.logger.WithFields(toLogrusFields(fields...)).Info(msg)
+}
+
+func (l *LogrusLogger) Warn(msg string, fields ...interface{}) {
+	l.logger.WithFields(toLogrusFields(fields...)).Warn(msg)
+}
+
+func (l *LogrusLogger) Error(msg string, fields ...interface{}) {
+	l.logger.WithFields(toLogrusFields(fields...)).Error(msg)
+}
+
+func (l *LogrusLogger) With(fields ...interface{}) Logger {
+	return &LogrusLogger{
+		logger: l.logger.WithFields(toLogrusFields(fields...)),
+		level:  l.level,
+	}
+}
+
+func (l *LogrusLogger) SetLevel(level string) {
+	l.level.Store(int32(parseLevel(level)))
+	l.logger.SetLevel(logrus.Level(l.level.Load()))
+}
+
+func toLogrusFields(fields ...interface{}) logrus.Fields {
+	// 转换字段到logrus支持的格式...
+}

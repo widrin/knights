@@ -11,11 +11,12 @@ import (
 )
 
 type GNetDriver struct {
-	config      *NetworkConfig
-	server      gnet.Server
+	config *NetworkConfig
+	// 这里原代码使用 gnet.Server 未定义，根据上下文推测应该是 gnet.Engine
+	server      gnet.Engine
 	connections sync.Map
 	stats       *TrafficStats
-	endian      EndianHandler
+	endian      *EndianHandler
 	pool        *ConnectionPool
 }
 
