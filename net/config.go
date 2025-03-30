@@ -4,13 +4,13 @@ import (
 	"errors"
 )
 
-type ProtocolType uint8
+type ProtocolType = string
 
 const (
-	TCP ProtocolType = iota + 1
-	UDP
-	WebSocket
-	KCP
+	TCP       ProtocolType = "tcp"
+	UDP       ProtocolType = "udp"
+	WebSocket ProtocolType = "ws"
+	KCP       ProtocolType = "kcp"
 )
 
 type NetworkConfig struct {

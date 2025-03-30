@@ -1,7 +1,7 @@
 package net
 
 import (
-	"context"
+	"fmt"
 	"sync"
 	"time"
 
@@ -11,8 +11,9 @@ import (
 )
 
 type GNetDriver struct {
-	config *NetworkConfig
-	// 这里原代码使用 gnet.Server 未定义，根据上下文推测应该是 gnet.Engine
+	gnet.BuiltinEventEngine
+
+	config      *NetworkConfig
 	server      gnet.Engine
 	connections sync.Map
 	stats       *TrafficStats
@@ -30,9 +31,8 @@ func (g *GNetDriver) Initialize(config *NetworkConfig) error {
 	g.endian = NewEndianHandler(config.Endianness)
 	g.pool = NewConnectionPool(config.MaxConn)
 
-	logger.Info("Initializing network driver",
-		logger.String("protocol", config.Protocol.String()),
-		logger.Int("port", config.Port))
+	logger.Info("Initializing network driver protocol: %d, host: %s, port: %d",
+		config.Protocol, config.Host, config.Port)
 	return nil
 }
 
@@ -43,17 +43,11 @@ func (g *GNetDriver) Start() error {
 		gnet.WithSocketSendBuffer(g.config.BufferSize),
 		gnet.WithSocketRecvBuffer(g.config.BufferSize),
 	}
+	protoAddr := fmt.Sprintf("%s://%s:%d", g.config.Protocol, g.config.Host, g.config.Port)
 
-	server, err := gnet.NewServer(&gnetHandler{driver: g}, options...)
-	if err != nil {
-		return err
-	}
+	logger.Info("Starting network server addr: %s", protoAddr)
 
-	g.server = server
-	logger.Info("Starting network server",
-		logger.String("host", g.config.Host),
-		logger.Int("port", g.config.Port))
-	return server.Run(context.Background())
+	return gnet.Run(g, protoAddr, options...)
 }
 
 // 实现Shutdown和GetConnections方法...

@@ -20,16 +20,12 @@ func (s *TrafficStats) RecordRead(n uint64) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.BytesRead += n
-	logger.Debug("Network read recorded",
-		logger.Uint64("bytes", n),
-		logger.Uint64("total", s.BytesRead))
+	logger.Debug("Network read recorded bytes: %d, total: %d", n, s.BytesRead)
 }
 
 func (s *TrafficStats) RecordWrite(n uint64) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.BytesWrite += n
-	logger.Debug("Network write recorded",
-		logger.Uint64("bytes", n),
-		logger.Uint64("total", s.BytesWrite))
+	logger.Debug("Network write recorded bytes: %d, total: %d", n, s.BytesWrite)
 }
