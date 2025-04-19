@@ -5,10 +5,10 @@ import (
 	"os"
 	"strings"
 	"sync"
-	"syscall"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/shirou/gopsutil/disk"
+	"github.com/shirou/gopsutil/mem"
 	"github.com/shirou/gopsutil/net"
 	"github.com/widrin/knights/logger"
 )
@@ -121,16 +121,13 @@ func (c *SystemCollector) collectMemoryUsage() {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	var info syscall.Statfs_t
-	err := syscall.Statfs("/", &info)
+	vmStat, err := mem.VirtualMemory()
 	if err != nil {
 		logger.Error("获取内存信息失败: %v", err)
 		return
 	}
 
-	total := info.Blocks * uint64(info.Bsize)
-	free := info.Bfree * uint64(info.Bsize)
-	c.memUsage.Set(float64(total - free))
+	c.memUsage.Set(float64(vmStat.Used))
 }
 
 func (c *SystemCollector) collectDiskUsage() {
