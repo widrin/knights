@@ -1,0 +1,27 @@
+server:
+  name: "knights-game"
+  address: "0.0.0.0"
+  port: 9003
+  service_type: "game"
+
+center:
+  address: "localhost:9001"
+
+game:
+  server_id: "game-1"
+  max_players: 10000
+  tick_rate: 20
+  room_max_players: 4
+
+database:
+  driver: "mysql"
+  host: "localhost"
+  port: 3306
+  username: "root"
+  password: "password"
+  database: "knights"
+
+redis:
+  address: "localhost:6379"
+  password: ""
+  db: 0

@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/widrin/knights/pkg/proto";
+
+// Request messages
+message LoginRequest {
+  string player_id = 1;
+  string token = 2;
+}
+
+message MoveRequest {
+  float x = 1;
+  float y = 2;
+  float z = 3;
+}
+
+message JoinRoomRequest {
+  string room_id = 1;
+}
+
+// Response messages
+message LoginResponse {
+  bool success = 1;
+  string player_id = 2;
+  string error = 3;
+}
+
+message MoveResponse {
+  bool success = 1;
+  float x = 2;
+  float y = 3;
+  float z = 4;
+}
+
+message JoinRoomResponse {
+  bool success = 1;
+  string room_id = 2;
+  string error = 3;
+}
+
+// Event messages
+message PlayerJoinedEvent {
+  string player_id = 1;
+}
+
+message PlayerLeftEvent {
+  string player_id = 1;
+}

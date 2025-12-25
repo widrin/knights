@@ -1,0 +1,15 @@
+server:
+  name: "knights-center"
+  address: "0.0.0.0"
+  port: 9001
+  service_type: "center"
+
+center:
+  address: "0.0.0.0"
+  heartbeat_interval: 30  # 心跳间隔(秒)
+  timeout: 90  # 超时时间(秒)
+
+redis:
+  address: "localhost:6379"
+  password: ""
+  db: 0
